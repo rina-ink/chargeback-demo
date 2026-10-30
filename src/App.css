@@ -202,3 +202,108 @@ h1 {
     transform: none;
   }
 }
+
+/* Transaction details page */
+
+.details-page {
+  max-width: 680px;
+}
+
+.back-button {
+  border: none;
+  background: transparent;
+  color: #2b5287;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 32px;
+}
+
+.back-button:hover {
+  text-decoration: underline;
+}
+
+.details-card {
+  background: white;
+  border: 1px solid #e3e8f0;
+  border-radius: 12px;
+  padding: 32px;
+  margin-top: 32px;
+}
+
+.details-card h2 {
+  font-size: 20px;
+  color: #14243b;
+  margin: 16px 0 8px;
+}
+
+.details-amount {
+  font-size: 22px;
+  font-weight: 600;
+  color: #14243b;
+  margin: 0 0 24px;
+}
+
+.details-list {
+  margin: 0 0 32px;
+}
+
+.details-list div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid #e3e8f0;
+}
+
+.details-list dt {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.details-list dd {
+  margin: 0;
+  color: #14243b;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: right;
+}
+
+/* Primary action button */
+
+.primary-button {
+  width: 100%;
+  padding: 14px 20px;
+  background: #175cd3;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.primary-button:hover {
+  background: #1249aa;
+}
+
+.primary-button:focus-visible,
+.back-button:focus-visible {
+  outline: 2px solid #175cd3;
+  outline-offset: 3px;
+}
+
+/* Transaction details responsive layout */
+
+@media (max-width: 640px) {
+  .details-card {
+    padding: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primary-button {
+    transition: none;
+  }
+}
