@@ -1,12 +1,9 @@
 
+import { useState } from "react";
+import TransactionCard from "./components/TransactionCard";
+import TransactionDetails from "./components/TransactionDetails";
+import type { Transaction } from "./types/transaction";
 import "./App.css";
-
-type Transaction = {
-  id: string;
-  merchant: string;
-  date: string;
-  amount: number;
-};
 
 const transactions: Transaction[] = [
   {
@@ -30,10 +27,23 @@ const transactions: Transaction[] = [
 ];
 
 function App() {
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<Transaction | null>(null);
+
   const handleTransactionClick = (
     transaction: Transaction
   ) => {
-    console.log("Selected transaction:", transaction);
+    setSelectedTransaction(transaction);
+  };
+
+  const handleBack = () => {
+    setSelectedTransaction(null);
+  };
+
+  const handleDispute = (transaction: Transaction) => {
+    window.alert(
+      `Dispute flow for ${transaction.merchant} is coming next!`
+    );
   };
 
   return (
@@ -48,6 +58,7 @@ function App() {
             href="#transactions"
             className="active"
             aria-current="page"
+            onClick={handleBack}
           >
             Transactions
           </a>
@@ -60,51 +71,35 @@ function App() {
         className="main-content"
         id="transactions"
       >
-        <header>
-          <p className="eyebrow">YOUR ACCOUNT</p>
+        {selectedTransaction ? (
+          <TransactionDetails
+            transaction={selectedTransaction}
+            onBack={handleBack}
+            onDispute={handleDispute}
+          />
+        ) : (
+          <>
+            <header>
+              <p className="eyebrow">YOUR ACCOUNT</p>
 
-          <h1>Transactions</h1>
+              <h1>Transactions</h1>
 
-          <p className="subtitle">
-            Review your recent card transactions.
-          </p>
-        </header>
+              <p className="subtitle">
+                Review your recent card transactions.
+              </p>
+            </header>
 
-        <section aria-label="Recent transactions">
-          {transactions.map((transaction) => (
-            <article
-              key={transaction.id}
-              className="transaction-card"
-            >
-              <button
-                type="button"
-                className="transaction-link"
-                onClick={() =>
-                  handleTransactionClick(transaction)
-                }
-                aria-label={`View transaction from ${transaction.merchant}`}
-              >
-                <div>
-                  <h3>{transaction.merchant}</h3>
-                  <p>{transaction.date}</p>
-                </div>
-
-                <div className="transaction-right">
-                  <strong>
-                    −€{transaction.amount.toFixed(2)}
-                  </strong>
-
-                  <span
-                    className="transaction-chevron"
-                    aria-hidden="true"
-                  >
-                    ›
-                  </span>
-                </div>
-              </button>
-            </article>
-          ))}
-        </section>
+            <section aria-label="Recent transactions">
+              {transactions.map((transaction) => (
+                <TransactionCard
+                  key={transaction.id}
+                  transaction={transaction}
+                  onSelect={handleTransactionClick}
+                />
+              ))}
+            </section>
+          </>
+        )}
       </main>
     </div>
   );
