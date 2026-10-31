@@ -307,3 +307,208 @@ h1 {
     transition: none;
   }
 }
+
+
+/* Dispute form */
+
+.dispute-page {
+  max-width: 680px;
+}
+
+.dispute-form {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-top: 32px;
+  padding: 32px;
+  background: white;
+  border: 1px solid #e3e8f0;
+  border-radius: 12px;
+}
+
+.dispute-transaction {
+  padding: 20px;
+  background: #f6f8fc;
+  border-radius: 8px;
+}
+
+.dispute-transaction .eyebrow {
+  margin: 0 0 16px;
+}
+
+.dispute-transaction-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: #14243b;
+  font-size: 15px;
+}
+
+.dispute-transaction > p:last-child {
+  margin: 8px 0 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.dispute-fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.dispute-fieldset legend {
+  margin-bottom: 16px;
+  color: #14243b;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.dispute-fieldset label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #e3e8f0;
+  border-radius: 8px;
+  color: #14243b;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.dispute-fieldset label:hover {
+  border-color: #b5c9e6;
+}
+
+.dispute-fieldset input {
+  accent-color: #175cd3;
+}
+
+.dispute-description {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dispute-description label {
+  color: #14243b;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.dispute-description textarea {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #e3e8f0;
+  border-radius: 8px;
+  resize: vertical;
+  color: #14243b;
+  background: white;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.dispute-description textarea:focus-visible {
+  outline: 2px solid #175cd3;
+  outline-offset: 2px;
+}
+
+.character-count {
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+  text-align: right;
+}
+
+.primary-button:disabled {
+  background: #aabbd2;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .dispute-form {
+    padding: 20px;
+  }
+}
+
+
+/* Dispute review */
+
+.review-card {
+  background: white;
+  border: 1px solid #e3e8f0;
+  border-radius: 12px;
+  padding: 32px;
+}
+
+.review-list {
+  margin: 0 0 32px;
+}
+
+.review-list > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px 0;
+  border-bottom: 1px solid #e3e8f0;
+}
+
+.review-list dt {
+  color: #64748b;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.review-list dd {
+  margin: 0;
+  color: #14243b;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+  .review-card {
+    padding: 20px;
+  }
+
+  .review-list > div {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .review-list dd {
+    text-align: left;
+  }
+}
+
+.submit-error {
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: #fff1f0;
+  color: #b42318;
+  font-size: 14px;
+}
+
+.success-card {
+  text-align: center;
+}
+
+.success-card .subtitle {
+  margin-bottom: 32px;
+}
+
+.success-icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  background: #e6f4ea;
+  color: #18794e;
+  font-size: 28px;
+}
