@@ -307,3 +307,128 @@ h1 {
     transition: none;
   }
 }
+
+
+/* Dispute form */
+
+.dispute-page {
+  max-width: 680px;
+}
+
+.dispute-form {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-top: 32px;
+  padding: 32px;
+  background: white;
+  border: 1px solid #e3e8f0;
+  border-radius: 12px;
+}
+
+.dispute-transaction {
+  padding: 20px;
+  background: #f6f8fc;
+  border-radius: 8px;
+}
+
+.dispute-transaction .eyebrow {
+  margin: 0 0 16px;
+}
+
+.dispute-transaction-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: #14243b;
+  font-size: 15px;
+}
+
+.dispute-transaction > p:last-child {
+  margin: 8px 0 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.dispute-fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.dispute-fieldset legend {
+  margin-bottom: 16px;
+  color: #14243b;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.dispute-fieldset label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #e3e8f0;
+  border-radius: 8px;
+  color: #14243b;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.dispute-fieldset label:hover {
+  border-color: #b5c9e6;
+}
+
+.dispute-fieldset input {
+  accent-color: #175cd3;
+}
+
+.dispute-description {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dispute-description label {
+  color: #14243b;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.dispute-description textarea {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #e3e8f0;
+  border-radius: 8px;
+  resize: vertical;
+  color: #14243b;
+  background: white;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.dispute-description textarea:focus-visible {
+  outline: 2px solid #175cd3;
+  outline-offset: 2px;
+}
+
+.character-count {
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+  text-align: right;
+}
+
+.primary-button:disabled {
+  background: #aabbd2;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .dispute-form {
+    padding: 20px;
+  }
+}

@@ -2,6 +2,7 @@
 import { useState } from "react";
 import TransactionCard from "./components/TransactionCard";
 import TransactionDetails from "./components/TransactionDetails";
+import DisputeForm from "./components/DisputeForm";
 import type { Transaction } from "./types/transaction";
 import "./App.css";
 
@@ -30,20 +31,31 @@ function App() {
   const [selectedTransaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
 
+  const [isDisputing, setIsDisputing] = useState(false);
+
+  // Select a transaction to view its details
   const handleTransactionClick = (
     transaction: Transaction
   ) => {
     setSelectedTransaction(transaction);
+    setIsDisputing(false);
   };
 
+  // Return to the transaction list
   const handleBack = () => {
     setSelectedTransaction(null);
+    setIsDisputing(false);
   };
 
+  // Open the dispute form
   const handleDispute = (transaction: Transaction) => {
-    window.alert(
-      `Dispute flow for ${transaction.merchant} is coming next!`
-    );
+    setSelectedTransaction(transaction);
+    setIsDisputing(true);
+  };
+
+  // Return from dispute form to transaction details
+  const handleBackToDetails = () => {
+    setIsDisputing(false);
   };
 
   return (
@@ -71,7 +83,12 @@ function App() {
         className="main-content"
         id="transactions"
       >
-        {selectedTransaction ? (
+        {selectedTransaction && isDisputing ? (
+          <DisputeForm
+            transaction={selectedTransaction}
+            onBack={handleBackToDetails}
+          />
+        ) : selectedTransaction ? (
           <TransactionDetails
             transaction={selectedTransaction}
             onBack={handleBack}
