@@ -3,8 +3,17 @@ import { useState } from "react";
 import TransactionCard from "./components/TransactionCard";
 import TransactionDetails from "./components/TransactionDetails";
 import DisputeForm from "./components/DisputeForm";
+import DisputeReview from "./components/DisputeReview";
 import type { Transaction } from "./types/transaction";
+import type { DisputeData } from "./types/dispute";
 import "./App.css";
+
+type Screen = "list" | "details" | "form" | "review";
+
+const initialDisputeData: DisputeData = {
+  reason: "",
+  description: "",
+};
 
 const transactions: Transaction[] = [
   {
@@ -31,31 +40,93 @@ function App() {
   const [selectedTransaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
 
-  const [isDisputing, setIsDisputing] = useState(false);
+  const [screen, setScreen] = useState<Screen>("list");
 
-  // Select a transaction to view its details
-  const handleTransactionClick = (
-    transaction: Transaction
-  ) => {
+  const [disputeData, setDisputeData] =
+    useState<DisputeData>(initialDisputeData);
+
+  const handleTransactionClick = (transaction: Transaction) => {
     setSelectedTransaction(transaction);
-    setIsDisputing(false);
+    setDisputeData(initialDisputeData);
+    setScreen("details");
   };
 
-  // Return to the transaction list
-  const handleBack = () => {
+  const handleBackToList = () => {
     setSelectedTransaction(null);
-    setIsDisputing(false);
+    setDisputeData(initialDisputeData);
+    setScreen("list");
   };
 
-  // Open the dispute form
   const handleDispute = (transaction: Transaction) => {
     setSelectedTransaction(transaction);
-    setIsDisputing(true);
+    setScreen("form");
   };
 
-  // Return from dispute form to transaction details
-  const handleBackToDetails = () => {
-    setIsDisputing(false);
+  const handleConfirm = () => {
+    // API integration comes in the next step.
+    console.log("Confirmed dispute:", {
+      transactionId: selectedTransaction?.id,
+      ...disputeData,
+    });
+
+    window.alert("Dispute reviewed successfully! API comes next.");
+  };
+
+  const renderContent = () => {
+    if (screen === "list" || !selectedTransaction) {
+      return (
+        <>
+          <header>
+            <p className="eyebrow">YOUR ACCOUNT</p>
+            <h1>Transactions</h1>
+            <p className="subtitle">
+              Review your recent card transactions.
+            </p>
+          </header>
+
+          <section aria-label="Recent transactions">
+            {transactions.map((transaction) => (
+              <TransactionCard
+                key={transaction.id}
+                transaction={transaction}
+                onSelect={handleTransactionClick}
+              />
+            ))}
+          </section>
+        </>
+      );
+    }
+
+    if (screen === "details") {
+      return (
+        <TransactionDetails
+          transaction={selectedTransaction}
+          onBack={handleBackToList}
+          onDispute={handleDispute}
+        />
+      );
+    }
+
+    if (screen === "form") {
+      return (
+        <DisputeForm
+          transaction={selectedTransaction}
+          data={disputeData}
+          onChange={setDisputeData}
+          onBack={() => setScreen("details")}
+          onContinue={() => setScreen("review")}
+        />
+      );
+    }
+
+    return (
+      <DisputeReview
+        transaction={selectedTransaction}
+        data={disputeData}
+        onBack={() => setScreen("form")}
+        onConfirm={handleConfirm}
+      />
+    );
   };
 
   return (
@@ -65,58 +136,20 @@ function App() {
 
         <nav aria-label="Main navigation">
           <a href="#overview">Overview</a>
-
           <a
             href="#transactions"
             className="active"
             aria-current="page"
-            onClick={handleBack}
+            onClick={handleBackToList}
           >
             Transactions
           </a>
-
           <a href="#disputes">Disputes</a>
         </nav>
       </aside>
 
-      <main
-        className="main-content"
-        id="transactions"
-      >
-        {selectedTransaction && isDisputing ? (
-          <DisputeForm
-            transaction={selectedTransaction}
-            onBack={handleBackToDetails}
-          />
-        ) : selectedTransaction ? (
-          <TransactionDetails
-            transaction={selectedTransaction}
-            onBack={handleBack}
-            onDispute={handleDispute}
-          />
-        ) : (
-          <>
-            <header>
-              <p className="eyebrow">YOUR ACCOUNT</p>
-
-              <h1>Transactions</h1>
-
-              <p className="subtitle">
-                Review your recent card transactions.
-              </p>
-            </header>
-
-            <section aria-label="Recent transactions">
-              {transactions.map((transaction) => (
-                <TransactionCard
-                  key={transaction.id}
-                  transaction={transaction}
-                  onSelect={handleTransactionClick}
-                />
-              ))}
-            </section>
-          </>
-        )}
+      <main className="main-content" id="transactions">
+        {renderContent()}
       </main>
     </div>
   );

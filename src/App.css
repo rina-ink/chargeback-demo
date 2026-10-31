@@ -432,3 +432,55 @@ h1 {
     padding: 20px;
   }
 }
+
+
+/* Dispute review */
+
+.review-card {
+  background: white;
+  border: 1px solid #e3e8f0;
+  border-radius: 12px;
+  padding: 32px;
+}
+
+.review-list {
+  margin: 0 0 32px;
+}
+
+.review-list > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px 0;
+  border-bottom: 1px solid #e3e8f0;
+}
+
+.review-list dt {
+  color: #64748b;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.review-list dd {
+  margin: 0;
+  color: #14243b;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 640px) {
+  .review-card {
+    padding: 20px;
+  }
+
+  .review-list > div {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .review-list dd {
+    text-align: left;
+  }
+}

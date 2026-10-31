@@ -1,41 +1,35 @@
 
-import { useState } from "react";
 import type { FormEvent } from "react";
 import type { Transaction } from "../types/transaction";
-
-type DisputeReason =
-    | "not_received"
-    | "incorrect_amount"
-    | "not_recognized"
-    | "other";
+import type { DisputeData, DisputeReason } from "../types/dispute";
+import { reasonLabels } from "../types/dispute";
 
 type DisputeFormProps = {
     transaction: Transaction;
+    data: DisputeData;
+    onChange: (data: DisputeData) => void;
     onBack: () => void;
+    onContinue: () => void;
 };
 
 export default function DisputeForm({
     transaction,
+    data,
+    onChange,
     onBack,
+    onContinue,
 }: DisputeFormProps) {
-    const [reason, setReason] = useState<DisputeReason | "">("");
-    const [description, setDescription] = useState("");
-
     const isValid =
-        reason !== "" && description.trim().length >= 10;
+        data.reason !== "" &&
+        data.description.trim().length >= 10 &&
+        data.description.length <= 1000;
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         if (!isValid) return;
 
-        console.log("Dispute data:", {
-            transactionId: transaction.id,
-            reason,
-            description: description.trim(),
-        });
-
-        window.alert("Dispute form validated successfully!");
+        onContinue();
     };
 
     return (
@@ -67,49 +61,22 @@ export default function DisputeForm({
                         Why are you disputing this transaction?
                     </legend>
 
-                    <label>
-                        <input
-                            type="radio"
-                            name="reason"
-                            value="not_received"
-                            checked={reason === "not_received"}
-                            onChange={() => setReason("not_received")}
-                        />
-                        Product or service not received
-                    </label>
-
-                    <label>
-                        <input
-                            type="radio"
-                            name="reason"
-                            value="incorrect_amount"
-                            checked={reason === "incorrect_amount"}
-                            onChange={() => setReason("incorrect_amount")}
-                        />
-                        Incorrect amount charged
-                    </label>
-
-                    <label>
-                        <input
-                            type="radio"
-                            name="reason"
-                            value="not_recognized"
-                            checked={reason === "not_recognized"}
-                            onChange={() => setReason("not_recognized")}
-                        />
-                        I don't recognize this transaction
-                    </label>
-
-                    <label>
-                        <input
-                            type="radio"
-                            name="reason"
-                            value="other"
-                            checked={reason === "other"}
-                            onChange={() => setReason("other")}
-                        />
-                        Other reason
-                    </label>
+                    {(Object.keys(reasonLabels) as DisputeReason[]).map(
+                        (reason) => (
+                            <label key={reason}>
+                                <input
+                                    type="radio"
+                                    name="reason"
+                                    value={reason}
+                                    checked={data.reason === reason}
+                                    onChange={() =>
+                                        onChange({ ...data, reason })
+                                    }
+                                />
+                                {reasonLabels[reason]}
+                            </label>
+                        )
+                    )}
                 </fieldset>
 
                 <div className="dispute-description">
@@ -119,9 +86,12 @@ export default function DisputeForm({
 
                     <textarea
                         id="dispute-description"
-                        value={description}
+                        value={data.description}
                         onChange={(event) =>
-                            setDescription(event.target.value)
+                            onChange({
+                                ...data,
+                                description: event.target.value,
+                            })
                         }
                         placeholder="Describe the issue with your transaction..."
                         rows={4}
@@ -131,7 +101,7 @@ export default function DisputeForm({
                     />
 
                     <p className="character-count">
-                        {description.length} / 1000 characters
+                        {data.description.length} / 1000 characters
                         (minimum 10)
                     </p>
                 </div>
