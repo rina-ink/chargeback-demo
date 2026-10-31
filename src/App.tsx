@@ -6,9 +6,19 @@ import DisputeForm from "./components/DisputeForm";
 import DisputeReview from "./components/DisputeReview";
 import type { Transaction } from "./types/transaction";
 import type { DisputeData } from "./types/dispute";
+import {
+  submitDispute,
+  type DisputeResponse,
+} from "./services/disputeApi";
+import DisputeSuccess from "./components/DisputeSuccess";
 import "./App.css";
 
-type Screen = "list" | "details" | "form" | "review";
+type Screen =
+  | "list"
+  | "details"
+  | "form"
+  | "review"
+  | "success";
 
 const initialDisputeData: DisputeData = {
   reason: "",
@@ -52,8 +62,12 @@ function App() {
   };
 
   const handleBackToList = () => {
+    if (isSubmitting) return;
+
     setSelectedTransaction(null);
     setDisputeData(initialDisputeData);
+    setSubmittedDispute(null);
+    setSubmitError(null);
     setScreen("list");
   };
 
@@ -62,14 +76,46 @@ function App() {
     setScreen("form");
   };
 
-  const handleConfirm = () => {
-    // API integration comes in the next step.
-    console.log("Confirmed dispute:", {
-      transactionId: selectedTransaction?.id,
-      ...disputeData,
-    });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-    window.alert("Dispute reviewed successfully! API comes next.");
+  const [submitError, setSubmitError] = useState<string | null>(
+    null
+  );
+
+  const [submittedDispute, setSubmittedDispute] =
+    useState<DisputeResponse | null>(null);
+
+  const handleConfirm = async () => {
+    if (
+      !selectedTransaction ||
+      !disputeData.reason ||
+      disputeData.description.trim().length < 10 ||
+      isSubmitting
+    ) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      const response = await submitDispute({
+        transactionId: selectedTransaction.id,
+        reason: disputeData.reason,
+        description: disputeData.description.trim(),
+      });
+
+      setSubmittedDispute(response);
+      setScreen("success");
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const renderContent = () => {
@@ -119,12 +165,23 @@ function App() {
       );
     }
 
+    if (screen === "success" && submittedDispute) {
+      return (
+        <DisputeSuccess
+          dispute={submittedDispute}
+          onDone={handleBackToList}
+        />
+      );
+    }
+
     return (
       <DisputeReview
         transaction={selectedTransaction}
         data={disputeData}
         onBack={() => setScreen("form")}
         onConfirm={handleConfirm}
+        isSubmitting={isSubmitting}
+        error={submitError}
       />
     );
   };

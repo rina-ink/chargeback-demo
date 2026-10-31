@@ -8,6 +8,8 @@ type DisputeReviewProps = {
     data: DisputeData;
     onBack: () => void;
     onConfirm: () => void;
+    isSubmitting: boolean;
+    error: string | null;
 };
 
 export default function DisputeReview({
@@ -15,6 +17,8 @@ export default function DisputeReview({
     data,
     onBack,
     onConfirm,
+    isSubmitting,
+    error,
 }: DisputeReviewProps) {
     if (!data.reason) return null;
 
@@ -26,6 +30,7 @@ export default function DisputeReview({
                 type="button"
                 className="back-button"
                 onClick={onBack}
+                disabled={isSubmitting}
             >
                 ← Back to edit
             </button>
@@ -64,12 +69,19 @@ export default function DisputeReview({
                     </div>
                 </dl>
 
+                {error && (
+                    <p className="submit-error" role="alert">
+                        {error}
+                    </p>
+                )}
+
                 <button
                     type="button"
                     className="primary-button"
                     onClick={onConfirm}
+                    disabled={isSubmitting}
                 >
-                    Confirm dispute
+                    {isSubmitting ? "Submitting..." : "Confirm dispute"}
                 </button>
             </div>
         </section>
